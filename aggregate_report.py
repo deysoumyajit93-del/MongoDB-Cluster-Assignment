@@ -1,4 +1,4 @@
-"""Aggregate per-environment statistics from Atlas data."""
+                                                           
 
 import os
 import sys
@@ -7,7 +7,6 @@ import csv
 BASE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE)
 import config
-
 
 def main():
     client = config.get_client()
@@ -57,7 +56,6 @@ def main():
         print(f"CSV written to {csv_path}")
 
     client.close()
-
 
 if __name__ == "__main__":
     main()

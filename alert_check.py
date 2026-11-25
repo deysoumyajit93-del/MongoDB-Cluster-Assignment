@@ -1,4 +1,4 @@
-"""Check M0 storage occupancy against a threshold and alert (exit non-zero if exceeded)."""
+                                                                                           
 
 import os
 import sys
@@ -10,10 +10,8 @@ import config
 
 THRESHOLD_PCT = float(os.getenv("ALERT_THRESHOLD_PCT", "80"))
 
-
 def connect():
     return config.get_client()
-
 
 def main():
     client = connect()
@@ -29,7 +27,6 @@ def main():
         sys.exit(2)
     print("OK: within threshold.")
     client.close()
-
 
 if __name__ == "__main__":
     main()

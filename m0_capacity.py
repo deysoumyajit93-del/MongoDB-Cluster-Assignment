@@ -1,11 +1,10 @@
-"""Calculate how many documents can be stored in a MongoDB Atlas M0 (free) cluster."""
+                                                                                      
 
 import os
 import math
 from bson import encode
 
 import config
-
 
 def sample_avg_doc_size(coll, sample_n=500):
     sizes = []
@@ -14,7 +13,6 @@ def sample_avg_doc_size(coll, sample_n=500):
     if not sizes:
         return None, 0
     return sum(sizes) / len(sizes), len(sizes)
-
 
 def main():
     client = config.get_client()
@@ -61,7 +59,6 @@ def main():
         pass
 
     client.close()
-
 
 if __name__ == "__main__":
     main()

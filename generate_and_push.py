@@ -1,4 +1,4 @@
-"""Generate data for 20 variables in a loop and push documents to MongoDB Atlas."""
+                                                                                   
 
 import os
 import random
@@ -10,9 +10,8 @@ from bson import encode
 
 import config
 
-
 def make_document(env_id: int, seq: int) -> dict:
-    """Build a single document containing 20 variables."""
+                                                          
     doc = {
         "env_id": env_id,
         "seq": seq,
@@ -26,7 +25,6 @@ def make_document(env_id: int, seq: int) -> dict:
     }
     doc["tags"] = [f"tag_{random.randint(1, 5)}" for _ in range(3)]
     return doc
-
 
 def main():
     env_id = int(os.getenv("ENV_ID", "0"))
@@ -58,7 +56,6 @@ def main():
     print(f"[env {env_id}] Done. inserted={inserted} elapsed={elapsed:.2f}s "
           f"rate={inserted/elapsed:.1f} docs/s approx_doc_size={sample_size} bytes")
     client.close()
-
 
 if __name__ == "__main__":
     main()

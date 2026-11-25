@@ -1,4 +1,4 @@
-"""Launch the generator in 20 separate (sub)environments/processes and wait."""
+                                                                               
 
 import os
 import sys
@@ -10,7 +10,6 @@ PYTHON = sys.executable
 SCRIPT = os.path.join(BASE, "generate_and_push.py")
 
 NUM_ENVS = 20
-
 
 def main():
     if not os.getenv("MONGO_URI"):
@@ -32,7 +31,7 @@ def main():
         )
         procs.append((env_id, p))
         print(f"Started environment {env_id} (pid {p.pid})")
-        time.sleep(0.3)  # stagger to avoid thundering herd
+        time.sleep(0.3)                                    
 
     print("\nAll 20 environments started. Waiting for completion...")
     for env_id, p in procs:
@@ -41,7 +40,6 @@ def main():
         print(out.strip())
 
     print("\nAll environments finished.")
-
 
 if __name__ == "__main__":
     main()

@@ -34,9 +34,8 @@ from pymongo import MongoClient
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority")
 
-
 def get_client(retries=5, timeout_ms=20000):
-    """Create a MongoClient with retry/backoff for transient Atlas TLS/network issues."""
+                                                                                         
     last_err = None
     for attempt in range(retries):
         try:

@@ -1,8 +1,8 @@
-"""Exquisite, detailed plots of machine metrics captured during the Atlas pull.
-
-Generates a multi-panel dashboard (metrics_dashboard.png) and a correlation
-heatmap (metrics_correlation.png).
-"""
+\
+\
+\
+\
+   
 
 import os
 import sys

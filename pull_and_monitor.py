@@ -1,5 +1,5 @@
-"""Pull documents from Atlas while monitoring CPU, memory and network usage,
-and report the approximate size of each ingested document."""
+\
+                                                             
 
 import os
 import time
@@ -11,17 +11,16 @@ from bson import encode
 
 import config
 
-
 class Monitor:
     def __init__(self, interval=0.5):
         self.interval = interval
         self._stop = threading.Event()
         self.cpu_samples = []
-        self.mem_samples = []          # percent
-        self.mem_used_samples = []     # bytes
+        self.mem_samples = []                   
+        self.mem_used_samples = []            
         self.net_start = None
         self.net_end = None
-        self.series = []               # time-series rows
+        self.series = []                                 
         self.thread = threading.Thread(target=self._run, daemon=True)
 
     def start(self):
@@ -71,9 +70,8 @@ class Monitor:
             "samples": len(self.cpu_samples),
         }
 
-
 def main():
-    limit = int(os.getenv("PULL_LIMIT", "0"))  # 0 = all
+    limit = int(os.getenv("PULL_LIMIT", "0"))           
     client = config.get_client()
     coll = client[config.DB_NAME][config.COLLECTION_NAME]
 
@@ -134,7 +132,6 @@ def main():
     print(f"\nReport written to {report_path}")
 
     client.close()
-
 
 if __name__ == "__main__":
     main()

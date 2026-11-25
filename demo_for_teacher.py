@@ -1,12 +1,12 @@
-"""One-click demo for presenting to a teacher.
-
-Runs (in order):
-  1. generate in a few environments
-  2. pull + monitor machine parameters
-  3. M0 capacity math
-  4. live progress bar (short)
-and writes a consolidated report: teacher_report.txt
-"""
+\
+\
+\
+\
+\
+\
+\
+\
+   
 
 import os
 import sys

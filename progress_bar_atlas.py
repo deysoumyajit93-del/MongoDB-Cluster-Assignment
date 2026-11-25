@@ -1,4 +1,4 @@
-"""Real-time progress bar showing percentage of M0 cluster storage occupied."""
+                                                                               
 
 import os
 import sys
@@ -6,12 +6,10 @@ import time
 
 import config
 
-
 def bar(pct, width=40):
     pct = max(0.0, min(100.0, pct))
     filled = int(width * pct / 100.0)
     return "[" + "#" * filled + "-" * (width - filled) + "]"
-
 
 def main():
     poll = float(os.getenv("POLL_INTERVAL", str(config.POLL_INTERVAL)))
@@ -43,7 +41,6 @@ def main():
         print("\nStopped by user.")
     finally:
         client.close()
-
 
 if __name__ == "__main__":
     main()
