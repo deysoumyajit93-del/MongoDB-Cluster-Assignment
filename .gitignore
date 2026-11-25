@@ -1,0 +1,21 @@
+# Secrets
+.env
+atlas-credentials.env
+*.env.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Generated artifacts
+Figure_*.png
+.vscode/
+pull_report.txt
+teacher_report.txt
+metrics_timeseries.csv
+aggregate_report.csv
+metrics_plot.png
+metrics_dashboard.png
+metrics_correlation.png
+metrics_plot.png
