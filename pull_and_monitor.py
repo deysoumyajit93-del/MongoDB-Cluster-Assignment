@@ -97,7 +97,6 @@ def main():
     elapsed = time.time() - t0
     monitor.stop()
 
-    # Write time-series CSV for plotting / teacher demo
     csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "metrics_timeseries.csv")
     with open(csv_path, "w", newline="") as f:
         import csv
@@ -122,7 +121,6 @@ def main():
     for k, v in stats.items():
         print(f"{k}: {v}")
 
-    # Save a small report file
     report_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pull_report.txt")
     with open(report_path, "w") as f:
         f.write(f"generated_at: {datetime.now().isoformat()}\n")

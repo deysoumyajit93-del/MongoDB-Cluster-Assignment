@@ -13,7 +13,6 @@ def main():
     client = config.get_client()
     coll = client[config.DB_NAME][config.COLLECTION_NAME]
 
-    # Per-environment aggregation
     pipeline = [
         {"$group": {
             "_id": "$env_id",
@@ -45,12 +44,10 @@ def main():
             "last_ts": str(r["last_ts"]),
         })
 
-    # Overall stats
     total = coll.estimated_document_count()
     print(f"\nTotal documents: {total}")
     print(f"Distinct environments: {len(rows)}")
 
-    # Write CSV
     csv_path = os.path.join(BASE, "aggregate_report.csv")
     if out_rows:
         with open(csv_path, "w", newline="", encoding="utf-8") as f:

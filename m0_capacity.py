@@ -24,12 +24,10 @@ def main():
     avg_size, n = sample_avg_doc_size(coll)
     print(f"Sampled {n} documents; avg BSON size = {avg_size:.2f} bytes")
 
-    # Fallback if collection empty
     if avg_size is None or avg_size <= 0:
         avg_size = 256.0
         print("Collection empty; using default avg doc size 256 bytes")
 
-    # db stats
     try:
         st = db.command("dbStats")
         print("\n===== Atlas DB stats =====")
@@ -41,9 +39,7 @@ def main():
         print("dbStats unavailable:", e)
 
     capacity = config.M0_CAPACITY_BYTES
-    # Raw document capacity (data only)
     raw_docs = capacity / avg_size
-    # Account for a typical index overhead (~20%) and MongoDB/Atlas overhead
     overhead_factor = 1.25
     effective_capacity = capacity / overhead_factor
     effective_docs = effective_capacity / avg_size
@@ -55,7 +51,6 @@ def main():
     print(f"With ~{int((overhead_factor-1)*100)}% overhead factor: {effective_docs:,.0f}")
     print(f"Approx documents (floor): {math.floor(effective_docs):,}")
 
-    # Also compute based on current stored size how full we are
     try:
         st = db.command("dbStats")
         used = st.get("storageSize", 0) or st.get("dataSize", 0)

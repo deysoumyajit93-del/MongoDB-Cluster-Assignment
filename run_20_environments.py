@@ -16,7 +16,6 @@ def main():
     if not os.getenv("MONGO_URI"):
         print("WARNING: MONGO_URI env var not set. Set it before running, e.g.")
         print('  set MONGO_URI=mongodb+srv://user:pass@cluster.mongodb.net/...')
-        # continue; script will fail fast with clear error
 
     procs = []
     for env_id in range(NUM_ENVS):

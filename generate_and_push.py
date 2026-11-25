@@ -19,10 +19,8 @@ def make_document(env_id: int, seq: int) -> dict:
         "timestamp": datetime.now(timezone.utc),
         "hostname": socket.gethostname(),
     }
-    # 20 variables
     for i in range(1, config.NUM_VARIABLES + 1):
         doc[f"var_{i}"] = round(random.uniform(0, 100), 4)
-    # a nested payload to make docs realistic
     doc["metrics"] = {
         f"m_{i}": random.randint(0, 1000) for i in range(1, 6)
     }
@@ -56,7 +54,6 @@ def main():
         inserted += len(batch)
 
     elapsed = time.time() - t0
-    # approximate doc size from last doc
     sample_size = len(encode(make_document(env_id, 0)))
     print(f"[env {env_id}] Done. inserted={inserted} elapsed={elapsed:.2f}s "
           f"rate={inserted/elapsed:.1f} docs/s approx_doc_size={sample_size} bytes")

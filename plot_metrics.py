@@ -34,7 +34,6 @@ df = pd.DataFrame(rows).astype({
 })
 df["net_recv_mb"] = df["net_bytes_recv"] / (1024 * 1024)
 df["net_sent_mb"] = df["net_bytes_sent"] / (1024 * 1024)
-# throughput (MB/s) via finite differences, smoothed
 dt = df["t_sec"].diff().replace(0, np.nan)
 df["recv_mbps"] = (df["net_bytes_recv"].diff() / dt / (1024 * 1024)).fillna(0).clip(lower=0)
 df["sent_mbps"] = (df["net_bytes_sent"].diff() / dt / (1024 * 1024)).fillna(0).clip(lower=0)
@@ -47,7 +46,6 @@ palette = sns.color_palette("husl", 6)
 fig = plt.figure(figsize=(16, 12))
 gs = fig.add_gridspec(3, 2, hspace=0.45, wspace=0.35)
 
-# 1. CPU
 ax = fig.add_subplot(gs[0, 0])
 sns.lineplot(data=df, x="t_sec", y="cpu_percent", ax=ax, color=palette[0], linewidth=2, label="CPU %")
 ax.fill_between(df["t_sec"], df["cpu_percent"], alpha=0.25, color=palette[0])
@@ -62,7 +60,6 @@ ax.set_title("CPU usage", fontweight="bold")
 ax.set_ylabel("CPU %"); ax.set_xlabel("Time (s)")
 ax.set_ylim(0, max(100, df["cpu_percent"].max() * 1.15))
 
-# 2. Memory %
 ax = fig.add_subplot(gs[0, 1])
 sns.lineplot(data=df, x="t_sec", y="mem_percent", ax=ax, color=palette[1], linewidth=2, label="Memory %")
 ax.fill_between(df["t_sec"], df["mem_percent"], alpha=0.25, color=palette[1])
@@ -76,14 +73,12 @@ ax.annotate(f"peak {df.loc[i,'mem_percent']:.1f}%",
 ax.set_title("Memory usage", fontweight="bold")
 ax.set_ylabel("Memory %"); ax.set_xlabel("Time (s)")
 
-# 3. Memory used MB
 ax = fig.add_subplot(gs[1, 0])
 sns.lineplot(data=df, x="t_sec", y="mem_used_mb", ax=ax, color=palette[2], linewidth=2)
 ax.fill_between(df["t_sec"], df["mem_used_mb"], alpha=0.2, color=palette[2])
 ax.set_title("Memory used (MB)", fontweight="bold")
 ax.set_ylabel("MB"); ax.set_xlabel("Time (s)")
 
-# 4. Cumulative network
 ax = fig.add_subplot(gs[1, 1])
 sns.lineplot(data=df, x="t_sec", y="net_recv_mb", ax=ax, color=palette[3], linewidth=2, label="Received")
 sns.lineplot(data=df, x="t_sec", y="net_sent_mb", ax=ax, color=palette[4], linewidth=2, label="Sent")
@@ -92,7 +87,6 @@ ax.set_title("Cumulative network transfer", fontweight="bold")
 ax.set_ylabel("MB"); ax.set_xlabel("Time (s)")
 ax.legend(loc="upper left", frameon=True)
 
-# 5. Throughput
 ax = fig.add_subplot(gs[2, 0])
 sns.lineplot(data=df, x="t_sec", y="recv_mbps_s", ax=ax, color=palette[3], linewidth=2, label="Recv (smoothed)")
 sns.lineplot(data=df, x="t_sec", y="sent_mbps_s", ax=ax, color=palette[4], linewidth=2, label="Sent (smoothed)")
@@ -100,7 +94,6 @@ ax.set_title("Network throughput (MB/s)", fontweight="bold")
 ax.set_ylabel("MB/s"); ax.set_xlabel("Time (s)")
 ax.legend(loc="upper right", frameon=True)
 
-# 6. Scatter CPU vs Memory
 ax = fig.add_subplot(gs[2, 1])
 sns.scatterplot(data=df, x="cpu_percent", y="mem_percent", ax=ax, hue="t_sec",
                 palette="viridis", size="net_recv_mb", sizes=(20, 200), legend=False)
@@ -110,7 +103,6 @@ r = df["cpu_percent"].corr(df["mem_percent"])
 ax.set_title(f"CPU vs Memory (r = {r:.2f})", fontweight="bold")
 ax.set_xlabel("CPU %"); ax.set_ylabel("Memory %")
 
-# Summary box
 total_recv = df["net_recv_mb"].iloc[-1]
 total_sent = df["net_sent_mb"].iloc[-1]
 summary = (f"Samples: {len(df)}\n"
@@ -128,7 +120,6 @@ plt.savefig(out, dpi=150, bbox_inches="tight")
 print(f"Saved {out}")
 plt.close(fig)
 
-# Correlation heatmap
 corr_cols = [c for c in ["cpu_percent", "mem_percent", "mem_used_mb", "net_recv_mb", "net_sent_mb"]
              if df[c].std(ddof=0) > 0]
 with np.errstate(divide="ignore", invalid="ignore"):

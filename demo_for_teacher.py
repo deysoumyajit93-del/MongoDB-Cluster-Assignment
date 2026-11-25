@@ -50,7 +50,6 @@ def main():
 
     banner("STEP 1/5 - Generate data in 5 separate environments")
     env = {"DOCS_PER_RUN": "100"}
-    # reuse launcher but override count by calling generate directly for 5 envs
     procs = []
     for i in range(5):
         e = dict(os.environ); e.update(env); e["ENV_ID"] = str(i)

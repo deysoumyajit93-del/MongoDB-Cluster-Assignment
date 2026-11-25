@@ -1,6 +1,5 @@
 import os
 
-# Optional: auto-load credentials from an Atlas env file if MONGO_URI is not set.
 def _load_env_file():
     candidates = [
         os.path.join(os.path.dirname(os.path.abspath(__file__)), "atlas-credentials.env"),
@@ -33,7 +32,6 @@ _load_env_file()
 import time
 from pymongo import MongoClient
 
-# MongoDB Atlas connection string. Set via environment variable or edit here.
 MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority")
 
 
@@ -58,14 +56,10 @@ def get_client(retries=5, timeout_ms=20000):
 DB_NAME = os.getenv("MONGO_DB", "monitoring_db")
 COLLECTION_NAME = os.getenv("MONGO_COLLECTION", "sensor_data")
 
-# M0 (free tier) storage capacity in bytes (512 MB)
 M0_CAPACITY_BYTES = 512 * 1024 * 1024
 
-# Number of variables / fields per document
 NUM_VARIABLES = 20
 
-# Number of documents to generate per run (per environment)
 DOCS_PER_RUN = 1000
 
-# Polling interval for progress bar (seconds)
 POLL_INTERVAL = 3
