@@ -1,4 +1,6 @@
 import os
+import time
+from pymongo import MongoClient
 
 def _load_env_file():
     candidates = [
@@ -29,15 +31,20 @@ def _load_env_file():
 
 _load_env_file()
 
-import time
-from pymongo import MongoClient
-
 MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority")
+DB_NAME = os.getenv("MONGO_DB", "monitoring_db")
+COLLECTION_NAME = os.getenv("MONGO_COLLECTION", "sensor_data")
+M0_CAPACITY_BYTES = 512 * 1024 * 1024
+NUM_VARIABLES = 20
+DOCS_PER_RUN = 1000
+POLL_INTERVAL = 3
 
-def get_client(retries=5, timeout_ms=20000):
-                                                                                         
+def get_client(retries=10, timeout_ms=20000, wait=True):
+    max_wait = int(os.getenv("ATLAS_MAX_WAIT", "300"))
+    deadline = time.time() + max_wait if wait else None
+    attempt = 0
     last_err = None
-    for attempt in range(retries):
+    while True:
         try:
             client = MongoClient(
                 MONGO_URI,
@@ -50,15 +57,11 @@ def get_client(retries=5, timeout_ms=20000):
             return client
         except Exception as e:
             last_err = e
-            time.sleep(min(2 ** attempt, 10))
-    raise last_err
-DB_NAME = os.getenv("MONGO_DB", "monitoring_db")
-COLLECTION_NAME = os.getenv("MONGO_COLLECTION", "sensor_data")
-
-M0_CAPACITY_BYTES = 512 * 1024 * 1024
-
-NUM_VARIABLES = 20
-
-DOCS_PER_RUN = 1000
-
-POLL_INTERVAL = 3
+            attempt += 1
+            if attempt >= retries and not wait:
+                raise
+            if deadline is not None and time.time() >= deadline:
+                raise last_err
+            sleep_for = min(2 ** min(attempt, 5), 15)
+            print("Atlas not reachable (attempt " + str(attempt) + "); retrying in " + str(sleep_for) + "s...", flush=True)
+            time.sleep(sleep_for)
